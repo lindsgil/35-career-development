@@ -17,13 +17,16 @@ const DLL = module.exports =  function() {
 DLL.prototype.append = function(val, key) {
   if(!val) throw new Error('Please provide a value');
   if(!key) throw new Error('Please provide a key');
-  if(!this.head) return this.head = this.tail = new Node(val, key);
+  if(!this.head) {
+    this.length++;
+    return this.head = this.tail = new Node(val, key);
+  }
 
   let node = new Node(val, key);
 
-  this.head.next = node;
-  node.prev = this.head;
-  this.head = this.head.next;
+  this.tail.next = node;
+  node.prev = this.tail;
+  this.tail = this.tail.next;
   this.length++;
   return this.head;
 };
@@ -31,14 +34,17 @@ DLL.prototype.append = function(val, key) {
 DLL.prototype.prepend = function(val, key) {
   if(!val) throw new Error('Please provide a value');
   if(!key) throw new Error('Please provide a key');
-  if(!this.tail) return this.tail = this.head = new Node(val, key);
+  if(!this.tail) {
+    this.length++;
+    return this.head = this.tail = new Node(val, key);
+  }
 
 
   let node = new Node(val, key);
 
-  this.tail.prev = node;
-  node.next = this.tail;
-  this.tail = this.tail.prev;
+  this.head.prev = node;
+  node.next = this.head;
+  this.head = this.head.prev;
   this.length++;
   return this.tail;
 };
@@ -52,7 +58,7 @@ DLL.prototype.find = function(key) {
     _traverse(node.next);
   };
 
-  _traverse(this.head);
+  return _traverse(this.head);
 };
 
 DLL.prototype.remove = function(key) {
@@ -62,19 +68,19 @@ DLL.prototype.remove = function(key) {
   if(this.tail.key === key && this.head === this.tail) {
     this.tail = null;
     this.head = null;
-    return this.length--;
+    return --this.length;
   }
 
   if(this.tail.key === key) {
     this.tail = this.tail.prev;
     this.tail.next = null;
-    return this.length--;
+    return --this.length;
   }
 
   if(this.head.key === key) {
     this.head = this.head.next;
     this.head.prev = null;
-    return this.length--;
+    return --this.length;
   }
 
   let _check = (node) => {
@@ -83,7 +89,7 @@ DLL.prototype.remove = function(key) {
       let temp = node.next;
       node.next.prev = node.prev;
       node.prev.next = temp;
-      return this.length--;
+      return --this.length;
     }
     _check(node.prev);
   };
