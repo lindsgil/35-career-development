@@ -9,7 +9,7 @@ const HashTable = module.exports = function(size=8192) {
 
 HashTable.prototype.hash = function(key) {
   if(!key) throw new Error('key required for hash');
-  let hash = key.split('').reduce((acc, val) => acc + val.charCode(), 0) % this.size;
+  let hash = key.split('').reduce((acc, val) => acc + val.charCodeAt(0), 0) % this.size;
 
   return hash;
 };
