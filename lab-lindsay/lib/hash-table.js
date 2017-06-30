@@ -1,6 +1,9 @@
 'use strict';
 
-const DLL = require('./DLL.js');
+const DLL = require('./double-linked-list.js');
+
+//Much quicker Big O notation than sorting method
+//Best to use a linked list as back-up storage in case of collisions
 
 const HashTable = module.exports = function(size=8192) {
   this.size = size;
@@ -23,6 +26,6 @@ HashTable.prototype.get = function(key) {
 };
 
 HashTable.prototype.remove = function(key) {
-  let address = this.hash(key);
-  this.buckets[address].head ? this.buckets[address].remove(key): new Error('invalid key');
+  let keyLocation = this.hash(key);
+  this.buckets[keyLocation].head ? this.buckets[keyLocation].remove(key): new Error('invalid key');
 };
